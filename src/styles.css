@@ -1,0 +1,64 @@
+/* 自定义样式 */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.hover-scale {
+  transition: transform 0.2s;
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+/* 平滑滚动 */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 代码预览区域样式 */
+pre[class*="language-"] {
+  margin: 0;
+  border-radius: 0.5rem;
+  background: #1e293b;
+  padding: 1rem;
+  overflow-x: auto;
+  max-height: 500px;
+}
+
+.dark pre[class*="language-"] {
+  background: #000000;
+}
+
+code[class*="language-"] {
+  text-shadow: none;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.9em;
+  color: #e2e8f0;
+}
+
+.dark code[class*="language-"] {
+  color: #f1f5f9;
+}
+
+/* 修复页面底部HTML代码显示问题 */
+.preview-container {
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background: #1e293b;
+  padding: 1rem;
+  margin: 1rem 0;
+}
+
+.dark .preview-container {
+  background: #0f172a;
+}
