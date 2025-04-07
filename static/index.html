@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Word2HTML</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      .dark-mode {
+        background-color: #1a1a1a;
+        color: #ffffff;
+      }
+      .dark-mode .bg-white {
+        background-color: #2d2d2d;
+      }
+      .dark-mode .text-gray-800 {
+        color: #ffffff;
+      }
+      .dark-mode .border-gray-300 {
+        border-color: #4a4a4a;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+      <div class="max-w-4xl mx-auto">
+        <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+          <h1 class="text-3xl font-bold text-center mb-6">Word2HTML</h1>
+
+          <!-- 文件上传区域 -->
+          <div class="mb-6">
+            <label
+              class="block text-gray-700 text-sm font-bold mb-2"
+              for="file-upload"
+            >
+              上传Word文档
+            </label>
+            <div class="flex items-center justify-center w-full">
+              <label
+                class="w-full flex flex-col items-center px-4 py-6 bg-white text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue-500 hover:text-white"
+              >
+                <i class="fas fa-cloud-upload-alt fa-2x"></i>
+                <span class="mt-2 text-base leading-normal">选择文件</span>
+                <input
+                  type="file"
+                  id="file-upload"
+                  class="hidden"
+                  accept=".doc,.docx"
+                />
+              </label>
+            </div>
+          </div>
+
+          <!-- 文本输入区域 -->
+          <div class="mb-6">
+            <label
+              class="block text-gray-700 text-sm font-bold mb-2"
+              for="text-input"
+            >
+              或输入文本
+            </label>
+            <textarea
+              id="text-input"
+              class="w-full h-32 px-3 py-2 text-gray-700 border rounded-lg focus:outline-none"
+              placeholder="在此输入文本..."
+            ></textarea>
+          </div>
+
+          <!-- 转换按钮 -->
+          <div class="text-center mb-6">
+            <button
+              id="convert-btn"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            >
+              转换为HTML
+            </button>
+          </div>
+
+          <!-- 结果区域 -->
+          <div id="result-section" class="hidden">
+            <div class="mb-4">
+              <label class="block text-gray-700 text-sm font-bold mb-2"
+                >生成的URL</label
+              >
+              <div class="flex">
+                <input
+                  type="text"
+                  id="page-url"
+                  class="flex-1 px-3 py-2 border rounded-l-lg"
+                  readonly
+                />
+                <button
+                  id="copy-url-btn"
+                  class="bg-gray-500 hover:bg-gray-700 text-white px-4 py-2 rounded-r-lg"
+                >
+                  复制链接
+                </button>
+              </div>
+            </div>
+            <div class="flex space-x-2 mb-4">
+              <button
+                id="open-url-btn"
+                class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+              >
+                打开页面
+              </button>
+              <button
+                id="copy-html-btn"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              >
+                复制HTML
+              </button>
+              <button
+                id="preview-btn"
+                class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded"
+              >
+                预览
+              </button>
+              <button
+                id="download-btn"
+                class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded"
+              >
+                下载HTML
+              </button>
+            </div>
+            <div id="preview-area" class="hidden">
+              <iframe
+                id="preview-frame"
+                class="w-full h-96 border rounded-lg"
+              ></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // 获取DOM元素
+      const fileUpload = document.getElementById("file-upload");
+      const textInput = document.getElementById("text-input");
+      const convertBtn = document.getElementById("convert-btn");
+      const resultSection = document.getElementById("result-section");
+      const pageUrl = document.getElementById("page-url");
+      const copyUrlBtn = document.getElementById("copy-url-btn");
+      const openUrlBtn = document.getElementById("open-url-btn");
+      const copyHtmlBtn = document.getElementById("copy-html-btn");
+      const previewBtn = document.getElementById("preview-btn");
+      const downloadBtn = document.getElementById("download-btn");
+      const previewArea = document.getElementById("preview-area");
+      const previewFrame = document.getElementById("preview-frame");
+
+      // 文件上传处理
+      fileUpload.addEventListener("change", (e) => {
+        const file = e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (e) => {
+            textInput.value = e.target.result;
+          };
+          reader.readAsText(file);
+        }
+      });
+
+      // 转换按钮点击事件
+      convertBtn.addEventListener("click", async () => {
+        const content = textInput.value.trim();
+        if (!content) {
+          alert("请输入文本或上传文件");
+          return;
+        }
+
+        try {
+          const response = await fetch("/save", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              html: content,
+            }),
+          });
+
+          const data = await response.json();
+          if (data.success) {
+            pageUrl.value = data.url;
+            resultSection.classList.remove("hidden");
+          } else {
+            alert("生成URL失败：" + data.error);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+          alert("发生错误，请重试");
+        }
+      });
+
+      // 复制URL按钮
+      copyUrlBtn.addEventListener("click", () => {
+        pageUrl.select();
+        document.execCommand("copy");
+        copyUrlBtn.textContent = "已复制";
+        setTimeout(() => {
+          copyUrlBtn.textContent = "复制链接";
+        }, 2000);
+      });
+
+      // 打开页面按钮
+      openUrlBtn.addEventListener("click", () => {
+        if (pageUrl.value) {
+          window.open(pageUrl.value, "_blank");
+        }
+      });
+
+      // 复制HTML按钮
+      copyHtmlBtn.addEventListener("click", () => {
+        textInput.select();
+        document.execCommand("copy");
+        copyHtmlBtn.textContent = "已复制";
+        setTimeout(() => {
+          copyHtmlBtn.textContent = "复制HTML";
+        }, 2000);
+      });
+
+      // 预览按钮
+      previewBtn.addEventListener("click", () => {
+        previewFrame.srcdoc = textInput.value;
+        previewArea.classList.remove("hidden");
+      });
+
+      // 下载HTML按钮
+      downloadBtn.addEventListener("click", () => {
+        const blob = new Blob([textInput.value], { type: "text/html" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "converted.html";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    </script>
+  </body>
+</html>

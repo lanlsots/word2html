@@ -1,63 +1,55 @@
 # Word2HTML
 
-一个简单而强大的文档转换工具，可以将Word文档、文本文件转换为美观的HTML页面。
+一个简单的文档转换工具，支持将Word文档转换为HTML格式。
 
 ## 功能特点
 
-- 支持多种文件格式（Word、TXT、Markdown）
-- 美观的界面设计
-- 深色/浅色模式切换
-- AI辅助生成内容
-- 实时预览
-- 代码高亮
-- 响应式设计
-- 支持导出HTML和图片
+- 支持Word文档上传和转换
+- 支持文本输入和转换
+- 自动生成可访问的URL
+- 支持HTML预览和下载
+- 响应式设计，支持移动端
 
-## 技术栈
+## 本地开发
 
-- HTML5
-- TailwindCSS
-- JavaScript
-- Python (后端服务)
-
-## 快速开始
-
-1. 克隆仓库：
+1. 克隆仓库
 ```bash
-git clone https://github.com/你的用户名/word2html.git
+git clone https://github.com/yourusername/word2html.git
 cd word2html
 ```
 
-2. 安装依赖：
+2. 创建虚拟环境
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+venv\Scripts\activate     # Windows
+```
+
+3. 安装依赖
 ```bash
 pip install -r requirements.txt
 ```
 
-3. 启动服务：
+4. 运行服务器
 ```bash
-python app.py
+python server.py
 ```
 
-4. 打开浏览器访问：`http://localhost:5000`
+5. 访问应用
+打开浏览器访问 http://localhost:5000
 
-## 使用说明
+## 部署到Vercel
 
-1. 上传文件或输入文本
-2. 点击"转换为HTML"按钮
-3. 查看生成的HTML代码
-4. 可以选择复制代码、预览、下载HTML或保存为图片
+1. 在Vercel上创建新项目
+2. 连接GitHub仓库
+3. 配置环境变量（如果需要）
+4. 部署
 
-## 配置说明
+## 技术栈
 
-1. 点击右上角的设置图标
-2. 输入API配置信息：
-   - API密钥
-   - 模型名称
-   - API URL
-
-## 贡献指南
-
-欢迎提交Issue和Pull Request！
+- 后端：Python Flask
+- 前端：HTML, CSS, JavaScript
+- 部署：Vercel
 
 ## 许可证
 

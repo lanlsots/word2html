@@ -1,0 +1,31 @@
+/* 自定义样式 */
+.file-upload-label {
+    transition: all 0.3s ease;
+}
+
+.file-upload-label:hover {
+    transform: translateY(-2px);
+}
+
+#preview-frame {
+    background-color: white;
+}
+
+.dark-mode #preview-frame {
+    background-color: #2d2d2d;
+}
+
+/* 响应式设计 */
+@media (max-width: 640px) {
+    .container {
+        padding: 1rem;
+    }
+    
+    .flex.space-x-2 {
+        flex-wrap: wrap;
+    }
+    
+    .flex.space-x-2 button {
+        margin-bottom: 0.5rem;
+    }
+} 

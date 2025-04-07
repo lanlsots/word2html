@@ -1,5 +1,5 @@
 @echo off
-echo 启动Word2HTML服务...
+echo Starting Word2HTML server...
 
 REM 激活Python虚拟环境（如果有）
 IF EXIST venv\Scripts\activate.bat (
