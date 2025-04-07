@@ -24,7 +24,7 @@
 
 1. 克隆仓库：
 ```bash
-git clone https://github.com/你的用户名/word2html.git
+git clone https://github.com/lanslots/word2html.git
 cd word2html
 ```
 
